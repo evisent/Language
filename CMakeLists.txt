@@ -4,5 +4,7 @@ project(Languages)
 set(CMAKE_CXX_STANDARD 17)
 
 add_executable(Languages 
-    main.cpp 
+    main.cpp
+    Lexer.cpp
+    Trie.cpp
 )

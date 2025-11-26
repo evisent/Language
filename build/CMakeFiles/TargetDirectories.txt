@@ -1,0 +1,3 @@
+C:/Users/ASUS/Language/build/CMakeFiles/Languages.dir
+C:/Users/ASUS/Language/build/CMakeFiles/edit_cache.dir
+C:/Users/ASUS/Language/build/CMakeFiles/rebuild_cache.dir
