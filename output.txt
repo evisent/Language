@@ -1,5 +1,11 @@
 TYPE                VALUE
 --------------------------------------------------
+KEYWORD             'int'
+IDENTIFIER          'main'
+PUNCTUATION         '('
+PUNCTUATION         ')'
+PUNCTUATION         '{'
+PUNCTUATION         '}'
 KEYWORD             'class'
 IDENTIFIER          'Program'
 PUNCTUATION         '{'

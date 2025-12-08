@@ -35,21 +35,16 @@ std::vector<std::pair<int, std::string>> Lexer::tokenize(const std::string& inpu
     size_t pos = 0;
 
     while (pos < input.length()) {
-        // Skip whitespace
         if (std::isspace(input[pos])) {
             ++pos;
             continue;
         }
-
-        // Skip single-line comments
         if (pos + 1 < input.length() && input[pos] == '/' && input[pos + 1] == '/') {
             while (pos < input.length() && input[pos] != '\n') {
                 ++pos;
             }
             continue;
         }
-
-        // Skip multi-line comments
         if (pos + 1 < input.length() && input[pos] == '/' && input[pos + 1] == '*') {
             pos += 2;
             while (pos + 1 < input.length() && !(input[pos] == '*' && input[pos + 1] == '/')) {
@@ -60,8 +55,7 @@ std::vector<std::pair<int, std::string>> Lexer::tokenize(const std::string& inpu
             }
             continue;
         }
-
-        // Try to find reserved words and operators
+        
         size_t start = pos;
         std::string tokenType;
         int foundType = trie.findLongestToken(input, pos, tokenType);
@@ -118,12 +112,12 @@ std::vector<std::pair<int, std::string>> Lexer::tokenize(const std::string& inpu
             ++pos;
             while (pos < input.length() && input[pos] != '"') {
                 if (input[pos] == '\\' && pos + 1 < input.length()) {
-                    ++pos; // Skip escape character
+                    ++pos;
                 }
                 ++pos;
             }
             if (pos < input.length()) {
-                ++pos; // Skip closing quote
+                ++pos;
             }
             std::string strLiteral = input.substr(start, pos - start);
             tokens.emplace_back(6, strLiteral);
@@ -135,13 +129,13 @@ std::vector<std::pair<int, std::string>> Lexer::tokenize(const std::string& inpu
             size_t start = pos;
             ++pos;
             if (pos < input.length() && input[pos] == '\\') {
-                ++pos; // Skip escape character
+                ++pos;
             }
             if (pos < input.length()) {
-                ++pos; // Skip character
+                ++pos;
             }
             if (pos < input.length() && input[pos] == '\'') {
-                ++pos; // Skip closing quote
+                ++pos;
             }
             std::string charLiteral = input.substr(start, pos - start);
             tokens.emplace_back(7, charLiteral);
@@ -168,7 +162,6 @@ std::string Lexer::getTokenTypeName(int type) {
         case 6: return "STRING_LITERAL";
         case 7: return "CHAR_LITERAL";
         case -1: return "UNKNOWN";
-        default: return "TYPE_" + std::to_string(type);
     }
 }
 
