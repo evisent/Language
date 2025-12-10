@@ -1,4 +1,5 @@
 #include "lexer.h"
+#include "Parser.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -48,4 +49,45 @@ int main() {
     std::cout << "Loaded source code from " << filename << std::endl;
     auto tokens = lexer.tokenize(sourceCode);
     writeTokensToFile(tokens, lexer, "../output.txt");
+    std::cout << "\n=====================================" << std::endl;
+    std::cout << "    SYNTAX ANALYSIS (PARSING)" << std::endl;
+    std::cout << "=====================================" << std::endl;
+    
+    // Создаем парсер с лексером
+    Parser parser(lexer, tokens);
+    
+    std::cout << "\nStarting syntax analysis..." << std::endl;
+    
+    bool parseSuccess = false;
+    try {
+        // Если у Parser есть метод, принимающий исходный код:
+        parseSuccess = parser.program();
+        
+        // ИЛИ если нужно сначала установить токены:
+        // parser.setTokens(tokens); // если такой метод существует
+        // parseSuccess = parser.program();
+        
+    } catch (const std::exception& e) {
+        std::cerr << "ERROR during parsing: " << e.what() << std::endl;
+        parseSuccess = false;
+    }
+    
+    // Вывод результата
+    if (parseSuccess) {
+        std::cout << "✓ Syntax analysis: SUCCESS" << std::endl;
+        std::cout << "The program is syntactically correct!" << std::endl;
+    } else {
+        std::cout << "✗ Syntax analysis: FAILED" << std::endl;
+        std::cout << "The program contains syntax errors!" << std::endl;
+    }
+    std::string outputFile = "syntax.txt";
+    // Добавляем результат в файл
+    std::ofstream outFile(outputFile, std::ios::app);
+    if (outFile.is_open()) {
+        outFile << "\n\n=== PARSING RESULT ===" << std::endl;
+        outFile << (parseSuccess ? "SUCCESS" : "FAILED") << std::endl;
+        outFile.close();
+    }
+    
+    return parseSuccess ? 0 : 1;
 }

@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/Languages.dir/Lexer.cpp.obj"
   "CMakeFiles/Languages.dir/Lexer.cpp.obj.d"
+  "CMakeFiles/Languages.dir/Parser.cpp.obj"
+  "CMakeFiles/Languages.dir/Parser.cpp.obj.d"
   "CMakeFiles/Languages.dir/Trie.cpp.obj"
   "CMakeFiles/Languages.dir/Trie.cpp.obj.d"
   "CMakeFiles/Languages.dir/main.cpp.obj"

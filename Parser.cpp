@@ -30,6 +30,7 @@ bool Parser::IsAtEnd() {
 
 bool Parser::program() {
     // Парсим (<class> | <function>)*
+    if(parseMain()) return true;
     while (!IsAtEnd()) {
         auto cur_token = PeekToken();
         auto next_token = PeekNextToken();
@@ -179,20 +180,27 @@ bool Parser::parseClassBody() {
     return true;
 }
 
-bool Parser::parseType(){
-    auto cur_token = PeekToken();
-    if(cur_token.first != 1 || (cur_token.second != "int" && cur_token.second != "char" && 
-        cur_token.second != "bool" && cur_token.second != "float")){
-            if (!parseClassName()) {
-            std::cerr << "Failed to parse class name" << std::endl;
-            return false;
-        }
-    }
-    else{
+bool Parser::parseType() {
+    auto t = PeekToken();
+
+    // builtin types
+    if (t.first == 1 && (
+        t.second == "int" || t.second == "char" ||
+        t.second == "bool" || t.second == "float" || t.second == "void"))
+    {
         GetNextToken();
+        return true;
     }
-    return true;
+
+    // class type: identifier
+    if (t.first == 4) { // IDENTIFIER
+        GetNextToken();
+        return true;
+    }
+
+    return false;
 }
+
 
 bool Parser::parseParameters() {
     auto token = GetNextToken();
@@ -243,6 +251,7 @@ bool Parser::parseFunctionBody(){
 }
 
 bool Parser::parseMainBody(){
+    auto token = PeekToken();
     if (!parseCompoundStatement()) {
         std::cerr << "Failed to parse compound statement" << std::endl;
         return false;
@@ -250,10 +259,13 @@ bool Parser::parseMainBody(){
     return true;
 }
 
-bool Parser::parseIdentifier(){
-    auto cur_token = GetNextToken();
-    if(cur_token.first != 4) return false;
-    return true;
+bool Parser::parseIdentifier() {
+    auto token = PeekToken();  // Только смотрим, не потребляем!
+    if (token.first == 4) {
+        GetNextToken();  // Потребляем здесь
+        return true;
+    }
+    return false;
 }
 
 bool Parser::parseClassMember(){
@@ -272,27 +284,26 @@ bool Parser::parseClassMember(){
     return false;
 }
 
-bool Parser::parseParameter(){
-    if(!parseType()){
-        std::cerr << "Failed to parse type" << std::endl;
-        return false;
-    }
-    if(!parseIdentifier()){
-        std::cerr << "Failed to parse identifier" << std::endl;
-        return false;
-    }
+bool Parser::parseParameter() {
+    if (!parseType()) return false;
+
+    auto t = PeekToken();
+    if (t.first != 4) return false;  // must be identifier
+    GetNextToken();
     return true;
 }
 
 bool Parser::parseCompoundStatement() {
-    auto token = GetNextToken();
+    auto token = PeekToken();
     if (token.first != 3 || token.second != "{") {
         std::cerr << "Syntax error: expected '{'" << std::endl;
         return false;
     }
+    GetNextToken();
     // Парсим statements (0 или более)
     token = PeekToken();
     while (token.first != 3 || token.second != "}") {
+        std::cout << token.second;
         if (!parseStatement()) {
             std::cerr << "Failed to parse statement" << std::endl;
             return false;
@@ -303,10 +314,6 @@ bool Parser::parseCompoundStatement() {
     GetNextToken();
     return true;
 }
-
-bool Parser::parseLetter(){}
-
-bool Parser::parseDigit(){}
 
 bool Parser::parseFieldDeclaration() {
     if (!parseType()) {
@@ -401,12 +408,6 @@ bool Parser::parseMethod(){
 }
 
 bool Parser::parseStatement(){
-    if(parseDeclarationStatement()){
-        return true;
-    }
-    if(parseExpressionStatement()){
-        return true;
-    }
     if(parseCompoundStatement()){
         return true;
     }
@@ -434,6 +435,12 @@ bool Parser::parseStatement(){
     if(parseReadStatement()){
         return true;
     }
+    if(parseExpressionStatement()){
+        return true;
+    }
+    if(parseDeclarationStatement()){
+        return true;
+    }
     return false;
 }
 
@@ -459,6 +466,7 @@ bool Parser::parseDestructorBody(){
 }
 
 bool Parser::parseDeclarationStatement(){
+    std::cout << PeekToken().second;
     if(parseVariableDeclaration()){
         return true;
     }
@@ -792,7 +800,7 @@ bool Parser::parseVariableDeclaration() {
     if (!parseType()) {
         return false;
     }
-    
+    std::cout << PeekToken().second;
     if (!parseIdentifier()) {
         std::cerr << "Failed to parse variable name" << std::endl;
         return false;
@@ -904,30 +912,26 @@ bool Parser::parseExpression() {
 }
 
 bool Parser::parseAssignmentExpression() {
-    // Пробуем условное выражение
-    if (parseConditionalExpression()) {
-        return true;
+    // Парсим условное выражение (левую часть)
+    if (!parseConditionalExpression()) {
+        return false;
     }
     
-    // Пробуем унарное выражение + оператор присваивания
-    size_t savePos = cur;
-    if (parseUnaryExpression()) {
-        auto token = PeekToken();
-        // Проверяем операторы присваивания
-        if (token.first == 2 && (token.second == "=" || token.second == "+=" || 
-                                 token.second == "-=" || token.second == "*=" || 
-                                 token.second == "/=" || token.second == "%=" || 
-                                 token.second == "<<=" || token.second == ">>=" || 
-                                 token.second == "&=" || token.second == "^=" || 
-                                 token.second == "|=")) {
-            GetNextToken(); // оператор присваивания
-            return parseAssignmentExpression();
-        }
+    // Проверяем оператор присваивания
+    auto token = PeekToken();
+    if (token.first == 2 && (token.second == "=" || token.second == "+=" || 
+                             token.second == "-=" || token.second == "*=" || 
+                             token.second == "/=" || token.second == "%=" || 
+                             token.second == "<<=" || token.second == ">>=" || 
+                             token.second == "&=" || token.second == "^=" || 
+                             token.second == "|=")) {
+        GetNextToken(); // оператор присваивания
+        // Парсим правую часть (рекурсивно)
+        return parseAssignmentExpression();
     }
     
-    // Откат если не получилось
-    cur = savePos;
-    return false;
+    // Если оператора присваивания нет, это просто условное выражение
+    return true;
 }
 
 bool Parser::parseConditionalExpression() {
@@ -1084,7 +1088,6 @@ bool Parser::parseAdditiveExpression() {
         }
         token = PeekToken();
     }
-    
     return true;
 }
 
@@ -1106,20 +1109,13 @@ bool Parser::parseMultiplicativeExpression() {
 }
 
 bool Parser::parseCastExpression() {
-    // Пробуем унарное выражение
-    size_t savePos = cur;
-    if (parseUnaryExpression()) {
-        return true;
-    }
-    
-    // Пробуем преобразование типа: "(" <type> ")" <cast_expression>
-    cur = savePos;
     auto token = PeekToken();
+    
+    // Проверяем преобразование типа: "(" <type> ")" 
     if (token.first == 3 && token.second == "(") {
         GetNextToken(); // "("
         
-        // Сохраняем позицию для отката
-        size_t typeSave = cur;
+        // Пробуем распарсить тип
         if (parseType()) {
             token = PeekToken();
             if (token.first == 3 && token.second == ")") {
@@ -1127,35 +1123,16 @@ bool Parser::parseCastExpression() {
                 return parseCastExpression();
             }
         }
-        
-        // Если не получилось, это могло быть выражение в скобках
-        cur = savePos;
-        if (token.first == 3 && token.second == "(") {
-            GetNextToken(); // "("
-            if (parseExpression()) {
-                token = PeekToken();
-                if (token.first == 3 && token.second == ")") {
-                    GetNextToken(); // ")"
-                    return true;
-                }
-            }
-        }
     }
     
-    return false;
+    // Если не преобразование типа, пробуем унарное выражение
+    return parseUnaryExpression();
 }
 
 bool Parser::parseUnaryExpression() {
-    size_t savePos = cur;
-    
-    // Пробуем постфиксное выражение
-    if (parsePostfixExpression()) {
-        return true;
-    }
-    
-    // Пробуем унарные операторы: & * + - ! ~
-    cur = savePos;
     auto token = PeekToken();
+    
+    // Унарные операторы: & * + - ! ~
     if (token.first == 2 && (token.second == "&" || token.second == "*" || 
                             token.second == "+" || token.second == "-" || 
                             token.second == "!" || token.second == "~")) {
@@ -1163,76 +1140,55 @@ bool Parser::parseUnaryExpression() {
         return parseCastExpression();
     }
     
-    // Пробуем ++ или -- перед выражением
-    cur = savePos;
-    token = PeekToken();
+    // ++ или -- перед выражением
     if (token.first == 3 && (token.second == "++" || token.second == "--")) {
         GetNextToken(); // "++" или "--"
         return parseCastExpression();
     }
     
-    // Пробуем sizeof
-    cur = savePos;
-    token = PeekToken();
+    // sizeof
     if (token.first == 1 && token.second == "sizeof") {
         GetNextToken(); // "sizeof"
         token = GetNextToken();
-        if (token.first != 3 || token.second != "(") {
-            return false;
-        }
-        if (!parseType()) {
-            return false;
-        }
+        if (token.first != 3 || token.second != "(") return false;
+        if (!parseType()) return false;
         token = GetNextToken();
-        if (token.first != 3 || token.second != ")") {
-            return false;
-        }
+        if (token.first != 3 || token.second != ")") return false;
         return true;
     }
     
-    // Пробуем new
-    cur = savePos;
-    token = PeekToken();
+    // new
     if (token.first == 1 && token.second == "new") {
         GetNextToken(); // "new"
-        if (!parseType()) {
-            return false;
-        }
+        if (!parseType()) return false;
         token = PeekToken();
         if (token.first == 3 && token.second == "[") {
             GetNextToken(); // "["
-            if (!parseExpression()) {
-                return false;
-            }
+            if (!parseExpression()) return false;
             token = GetNextToken();
-            if (token.first != 3 || token.second != "]") {
-                return false;
-            }
+            if (token.first != 3 || token.second != "]") return false;
         }
         return true;
     }
     
-    // Пробуем delete
-    cur = savePos;
-    token = PeekToken();
+    // delete
     if (token.first == 1 && token.second == "delete") {
         GetNextToken(); // "delete"
-        // Пробуем вариант с []
         token = PeekToken();
         if (token.first == 3 && token.second == "[") {
             GetNextToken(); // "["
             token = GetNextToken();
-            if (token.first != 3 || token.second != "]") {
-                return false;
-            }
+            if (token.first != 3 || token.second != "]") return false;
         }
         return parseCastExpression();
     }
     
-    return false;
+    // Если не унарный оператор, пробуем постфиксное выражение
+    return parsePostfixExpression();
 }
 
 bool Parser::parsePostfixExpression() {
+    // Парсим первичное выражение (идентификатор, число и т.д.)
     if (!parsePrimaryExpression()) {
         return false;
     }
@@ -1244,48 +1200,35 @@ bool Parser::parsePostfixExpression() {
         // Индексация: "[" expression "]"
         if (token.first == 3 && token.second == "[") {
             GetNextToken(); // "["
-            if (!parseExpression()) {
-                return false;
-            }
+            if (!parseExpression()) return false;
             token = GetNextToken();
-            if (token.first != 3 || token.second != "]") {
-                return false;
-            }
+            if (token.first != 3 || token.second != "]") return false;
             continue;
         }
         
         // Вызов функции: "(" [expression_list] ")"
         if (token.first == 3 && token.second == "(") {
             GetNextToken(); // "("
-            // Опциональный список выражений
             token = PeekToken();
             if (token.first != 3 || token.second != ")") {
-                if (!parseExpressionList()) {
-                    return false;
-                }
+                if (!parseExpressionList()) return false;
             }
             token = GetNextToken();
-            if (token.first != 3 || token.second != ")") {
-                return false;
-            }
+            if (token.first != 3 || token.second != ")") return false;
             continue;
         }
         
         // Доступ к полю: "." identifier
         if (token.first == 3 && token.second == ".") {
             GetNextToken(); // "."
-            if (!parseIdentifier()) {
-                return false;
-            }
+            if (!parseIdentifier()) return false;
             continue;
         }
         
         // Доступ через указатель: "->" identifier
         if (token.first == 3 && token.second == "->") {
             GetNextToken(); // "->"
-            if (!parseIdentifier()) {
-                return false;
-            }
+            if (!parseIdentifier()) return false;
             continue;
         }
         
@@ -1306,31 +1249,53 @@ bool Parser::parsePrimaryExpression() {
     auto token = PeekToken();
     
     // Идентификатор
-    if (parseIdentifier()) {
+    if (token.first == 4) {
+        GetNextToken();
         return true;
     }
     
-    // Литерал
-    if (parseLiteral()) {
+    // Литерал (число)
+    if (token.first == 5) {
+        GetNextToken();
+        return true;
+    }
+    
+    // Символьный литерал
+    if (token.first == 7) {
+        GetNextToken();
+        return true;
+    }
+    
+    // Строковый литерал
+    if (token.first == 6) {
+        GetNextToken();
+        return true;
+    }
+    
+    // true/false
+    if (token.first == 1 && (token.second == "true" || token.second == "false")) {
+        GetNextToken();
+        return true;
+    }
+    
+    // nullptr
+    if (token.first == 1 && token.second == "nullptr") {
+        GetNextToken();
         return true;
     }
     
     // Выражение в скобках
     if (token.first == 3 && token.second == "(") {
         GetNextToken(); // "("
-        if (!parseExpression()) {
-            return false;
-        }
+        if (!parseExpression()) return false;
         token = GetNextToken();
-        if (token.first != 3 || token.second != ")") {
-            return false;
-        }
+        if (token.first != 3 || token.second != ")") return false;
         return true;
     }
     
     // this
     if (token.first == 1 && token.second == "this") {
-        GetNextToken(); // "this"
+        GetNextToken();
         return true;
     }
     
@@ -1369,6 +1334,63 @@ bool Parser::parseLiteral() {
         GetNextToken();
         return true;
     }
-    
+    return false;
+}
+
+bool Parser::parseMethodBody() {
+    return parseCompoundStatement(); // Согласно грамматике, тело метода = составной оператор
+}
+
+bool Parser::parseLetter() {
+    // Эта функция может быть не нужна, так как лексер уже разобрал идентификаторы
+    // Но если требуется по грамматике, можно реализовать проверку
+    auto token = PeekToken();
+    if (token.second.length() == 1) {
+        char c = token.second[0];
+        if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_') {
+            GetNextToken();
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Parser::parseDigit() {
+    // Аналогично, может быть не нужна
+    auto token = PeekToken();
+    if (token.second.length() == 1) {
+        char c = token.second[0];
+        if (c >= '0' && c <= '9') {
+            GetNextToken();
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Parser::parseAssignmentOperator() {
+    auto token = PeekToken();
+    if (token.first == 2) { // OPERATOR
+        std::string op = token.second;
+        if (op == "=" || op == "+=" || op == "-=" || op == "*=" || 
+            op == "/=" || op == "%=" || op == "<<=" || op == ">>=" || 
+            op == "&=" || op == "^=" || op == "|=") {
+            GetNextToken();
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Parser::parseUnaryOperator() {
+    auto token = PeekToken();
+    if (token.first == 2) { // OPERATOR
+        std::string op = token.second;
+        if (op == "&" || op == "*" || op == "+" || op == "-" || 
+            op == "!" || op == "~") {
+            GetNextToken();
+            return true;
+        }
+    }
     return false;
 }

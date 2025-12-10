@@ -9,6 +9,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "C:/Users/ASUS/Language/Lexer.cpp" "CMakeFiles/Languages.dir/Lexer.cpp.obj" "gcc" "CMakeFiles/Languages.dir/Lexer.cpp.obj.d"
+  "C:/Users/ASUS/Language/Parser.cpp" "CMakeFiles/Languages.dir/Parser.cpp.obj" "gcc" "CMakeFiles/Languages.dir/Parser.cpp.obj.d"
   "C:/Users/ASUS/Language/Trie.cpp" "CMakeFiles/Languages.dir/Trie.cpp.obj" "gcc" "CMakeFiles/Languages.dir/Trie.cpp.obj.d"
   "C:/Users/ASUS/Language/main.cpp" "CMakeFiles/Languages.dir/main.cpp.obj" "gcc" "CMakeFiles/Languages.dir/main.cpp.obj.d"
   )

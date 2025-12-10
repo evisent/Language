@@ -7,4 +7,5 @@ add_executable(Languages
     main.cpp
     Lexer.cpp
     Trie.cpp
+    Parser.cpp
 )

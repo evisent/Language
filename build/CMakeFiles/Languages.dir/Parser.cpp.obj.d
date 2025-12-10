@@ -1,5 +1,6 @@
-CMakeFiles/Languages.dir/main.cpp.obj: C:\Users\ASUS\Language\main.cpp \
- C:\Users\ASUS\Language\lexer.h C:\Users\ASUS\Language\Trie.h \
+CMakeFiles/Languages.dir/Parser.cpp.obj: \
+ C:\Users\ASUS\Language\Parser.cpp C:\Users\ASUS\Language\Parser.h \
+ C:\Users\ASUS\Language\Lexer.h C:\Users\ASUS\Language\Trie.h \
  C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/string \
  C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/bits/requires_hosted.h \
  C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/x86_64-w64-mingw32/bits/c++config.h \
@@ -151,10 +152,8 @@ CMakeFiles/Languages.dir/main.cpp.obj: C:\Users\ASUS\Language\main.cpp \
  C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/bits/stl_vector.h \
  C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/bits/stl_bvector.h \
  C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/bits/vector.tcc \
- C:\Users\ASUS\Language\Parser.h C:\Users\ASUS\Language\Lexer.h \
- C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/iostream \
- C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/ostream \
- C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/bits/ostream.h \
+ C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/fstream \
+ C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/istream \
  C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/ios \
  C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/bits/ios_base.h \
  C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/bits/locale_classes.h \
@@ -173,16 +172,17 @@ CMakeFiles/Languages.dir/main.cpp.obj: C:\Users\ASUS\Language\main.cpp \
  C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/x86_64-w64-mingw32/bits/ctype_inline.h \
  C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/bits/locale_facets.tcc \
  C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/bits/basic_ios.tcc \
+ C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/ostream \
+ C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/bits/ostream.h \
  C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/bits/ostream.tcc \
- C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/istream \
  C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/bits/istream.tcc \
- C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/fstream \
  C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/bits/codecvt.h \
  C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/x86_64-w64-mingw32/bits/basic_file.h \
  C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/x86_64-w64-mingw32/bits/c++io.h \
  C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/bits/fstream.tcc \
  C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/sstream \
  C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/bits/sstream.tcc \
+ C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/iostream \
  C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/iomanip \
  C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/locale \
  C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/bits/locale_facets_nonio.h \

@@ -152,6 +152,30 @@ Lexer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Languages.dir\build.make CMakeFiles/Languages.dir/Lexer.cpp.s
 .PHONY : Lexer.cpp.s
 
+Parser.obj: Parser.cpp.obj
+.PHONY : Parser.obj
+
+# target to build an object file
+Parser.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Languages.dir\build.make CMakeFiles/Languages.dir/Parser.cpp.obj
+.PHONY : Parser.cpp.obj
+
+Parser.i: Parser.cpp.i
+.PHONY : Parser.i
+
+# target to preprocess a source file
+Parser.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Languages.dir\build.make CMakeFiles/Languages.dir/Parser.cpp.i
+.PHONY : Parser.cpp.i
+
+Parser.s: Parser.cpp.s
+.PHONY : Parser.s
+
+# target to generate assembly for a file
+Parser.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Languages.dir\build.make CMakeFiles/Languages.dir/Parser.cpp.s
+.PHONY : Parser.cpp.s
+
 Trie.obj: Trie.cpp.obj
 .PHONY : Trie.obj
 
@@ -212,6 +236,9 @@ help:
 	@echo ... Lexer.obj
 	@echo ... Lexer.i
 	@echo ... Lexer.s
+	@echo ... Parser.obj
+	@echo ... Parser.i
+	@echo ... Parser.s
 	@echo ... Trie.obj
 	@echo ... Trie.i
 	@echo ... Trie.s

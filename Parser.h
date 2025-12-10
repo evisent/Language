@@ -8,12 +8,17 @@
 
 class Parser{
 private:
-    bool IsAtEnd();
     Lexer lexer;
     std::vector<std::pair<int, std::string>> tokens;
     long long cur = 0;
-public:
-    bool program();
+    
+    // Вспомогательные методы доступа к токенам
+    std::pair<int, std::string> GetNextToken();
+    std::pair<int, std::string> PeekToken();
+    std::pair<int, std::string> PeekNextToken();
+    bool IsAtEnd();
+    
+    // Основные парсеры (уже были)
     bool parseClass();
     bool parseFunction();
     bool parseMain();
@@ -52,6 +57,8 @@ public:
     bool parseVariableDeclaration();
     bool parseArrayDeclaration();
     bool parseExpression();
+    
+    // Новые парсеры для выражений (добавлены)
     bool parseForInit();
     bool parseExpressionList();
     bool parseAssignmentExpression();
@@ -71,9 +78,17 @@ public:
     bool parsePostfixExpression();
     bool parsePrimaryExpression();
     bool parseLiteral();
-    std::pair<int, std::string> Parser::GetNextToken();
-    std::pair<int, std::string> Parser::PeekToken();
-    std::pair<int, std::string> Parser::PeekNextToken();
+    
+    // Вспомогательные функции для операторов
+    bool parseAssignmentOperator();
+    bool parseUnaryOperator();
+    
+public:
+    // Конструктор
+    Parser(Lexer& lex, std::vector<std::pair<int, std::string>> toks) : lexer(lex), tokens(toks){}
+    
+    // Основной метод
+    bool program();
 };
 
 #endif
