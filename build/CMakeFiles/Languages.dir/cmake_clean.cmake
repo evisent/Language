@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/Languages.dir/ASTnode.cpp.obj"
+  "CMakeFiles/Languages.dir/ASTnode.cpp.obj.d"
   "CMakeFiles/Languages.dir/Lexer.cpp.obj"
   "CMakeFiles/Languages.dir/Lexer.cpp.obj.d"
   "CMakeFiles/Languages.dir/Parser.cpp.obj"

@@ -22,5 +22,11 @@
   "command": "c:\\Users\\ASUS\\Downloads\\winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2\\mingw64\\bin\\g++.exe   -g -std=gnu++17 -o CMakeFiles\\Languages.dir\\Parser.cpp.obj -c C:\\Users\\ASUS\\Language\\Parser.cpp",
   "file": "C:/Users/ASUS/Language/Parser.cpp",
   "output": "CMakeFiles/Languages.dir/Parser.cpp.obj"
+},
+{
+  "directory": "C:/Users/ASUS/Language/build",
+  "command": "c:\\Users\\ASUS\\Downloads\\winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2\\mingw64\\bin\\g++.exe   -g -std=gnu++17 -o CMakeFiles\\Languages.dir\\ASTnode.cpp.obj -c C:\\Users\\ASUS\\Language\\ASTnode.cpp",
+  "file": "C:/Users/ASUS/Language/ASTnode.cpp",
+  "output": "CMakeFiles/Languages.dir/ASTnode.cpp.obj"
 }
 ]

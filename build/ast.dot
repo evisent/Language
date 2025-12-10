@@ -1,0 +1,21 @@
+digraph AST {
+  node [shape=box, style=filled, fillcolor=lightblue];
+  rankdir=TB;
+
+  node0 [label="Program [Program]"];
+  node1 [label="MainFunction [main]"];
+  node2 [label="CompoundStmt [Parameters]"];
+  node3 [label="CompoundStmt"];
+  node4 [label="ExprStmt"];
+  node5 [label="AssignExpr [=]"];
+  node6 [label="Identifier [x]"];
+  node7 [label="Literal [5]"];
+
+  node0 -> node1;
+  node1 -> node2;
+  node1 -> node3;
+  node3 -> node4;
+  node4 -> node5;
+  node5 -> node6;
+  node5 -> node7;
+}

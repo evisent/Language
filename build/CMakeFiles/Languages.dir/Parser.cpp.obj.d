@@ -152,6 +152,7 @@ CMakeFiles/Languages.dir/Parser.cpp.obj: \
  C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/bits/stl_vector.h \
  C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/bits/stl_bvector.h \
  C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/bits/vector.tcc \
+ C:\Users\ASUS\Language\ASTnode.h \
  C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/fstream \
  C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/istream \
  C:/Users/ASUS/Downloads/winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r2/mingw64/include/c++/15.2.0/ios \

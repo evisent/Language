@@ -128,6 +128,30 @@ Languages/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Languages.dir\build.make CMakeFiles/Languages.dir/build
 .PHONY : Languages/fast
 
+ASTnode.obj: ASTnode.cpp.obj
+.PHONY : ASTnode.obj
+
+# target to build an object file
+ASTnode.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Languages.dir\build.make CMakeFiles/Languages.dir/ASTnode.cpp.obj
+.PHONY : ASTnode.cpp.obj
+
+ASTnode.i: ASTnode.cpp.i
+.PHONY : ASTnode.i
+
+# target to preprocess a source file
+ASTnode.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Languages.dir\build.make CMakeFiles/Languages.dir/ASTnode.cpp.i
+.PHONY : ASTnode.cpp.i
+
+ASTnode.s: ASTnode.cpp.s
+.PHONY : ASTnode.s
+
+# target to generate assembly for a file
+ASTnode.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Languages.dir\build.make CMakeFiles/Languages.dir/ASTnode.cpp.s
+.PHONY : ASTnode.cpp.s
+
 Lexer.obj: Lexer.cpp.obj
 .PHONY : Lexer.obj
 
@@ -233,6 +257,9 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... Languages
+	@echo ... ASTnode.obj
+	@echo ... ASTnode.i
+	@echo ... ASTnode.s
 	@echo ... Lexer.obj
 	@echo ... Lexer.i
 	@echo ... Lexer.s

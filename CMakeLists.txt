@@ -8,4 +8,5 @@ add_executable(Languages
     Lexer.cpp
     Trie.cpp
     Parser.cpp
+    ASTnode.cpp
 )

@@ -1,0 +1,11 @@
+SYNTAX TREE:
+============
+
+└── Program [Program]
+    └── MainFunction [main]
+        ├── CompoundStmt [Parameters]
+        └── CompoundStmt
+            └── ExprStmt
+                └── AssignExpr [=]
+                    ├── Identifier [x]
+                    └── Literal [5]
