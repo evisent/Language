@@ -13,13 +13,11 @@ private:
     std::vector<std::pair<int, std::string>> tokens;
     long long cur = 0;
     
-    // Вспомогательные методы доступа к токенам
     std::pair<int, std::string> GetNextToken();
     std::pair<int, std::string> PeekToken();
     std::pair<int, std::string> PeekNextToken();
     bool IsAtEnd();
     
-    // Основные парсеры (уже были)
     std::shared_ptr<ASTNode> parseClass();
     std::shared_ptr<ASTNode> parseFunction();
     std::shared_ptr<ASTNode> parseMain();
@@ -58,8 +56,6 @@ private:
     std::shared_ptr<ASTNode> parseVariableDeclaration();
     std::shared_ptr<ASTNode> parseArrayDeclaration();
     std::shared_ptr<ASTNode> parseExpression();
-    
-    // Новые парсеры для выражений (добавлены)
     std::shared_ptr<ASTNode> parseForInit();
     std::shared_ptr<ASTNode> parseExpressionList();
     std::shared_ptr<ASTNode> parseAssignmentExpression();
@@ -79,8 +75,6 @@ private:
     std::shared_ptr<ASTNode> parsePostfixExpression();
     std::shared_ptr<ASTNode> parsePrimaryExpression();
     std::shared_ptr<ASTNode> parseLiteral();
-    
-    // Вспомогательные функции для операторов
     std::shared_ptr<ASTNode> parseAssignmentOperator();
     std::shared_ptr<ASTNode> parseUnaryOperator();
     std::shared_ptr<ASTNode> createNode(NodeType type, const std::string& value = "");
@@ -91,10 +85,7 @@ private:
                                                  std::shared_ptr<ASTNode> operand);
     
 public:
-    // Конструктор
     Parser(Lexer& lex, std::vector<std::pair<int, std::string>> toks) : lexer(lex), tokens(toks){}
-    
-    // Основной метод
     std::shared_ptr<ASTNode> program();
 };
 

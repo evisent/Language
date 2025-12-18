@@ -2,10 +2,70 @@ SYNTAX TREE:
 ============
 
 └── Program [Program]
+    ├── ClassDecl [bebra]
+    │   ├── Identifier [bebra]
+    │   └── CompoundStmt [ClassBody]
+    │       ├── Constructor
+    │       │   ├── CompoundStmt [Parameters]
+    │       │   └── CompoundStmt
+    │       ├── Destructor
+    │       │   └── CompoundStmt
+    │       └── Method [method]
+    │           ├── TypeSpecifier [int]
+    │           ├── Identifier [method]
+    │           ├── CompoundStmt [Parameters]
+    │           │   └── Parameter
+    │           │       ├── TypeSpecifier [int]
+    │           │       └── Identifier [x]
+    │           └── CompoundStmt
+    │               └── ReturnStmt
+    │                   └── Identifier [x]
+    ├── FunctionDecl [fun]
+    │   ├── TypeSpecifier [int]
+    │   ├── Identifier [fun]
+    │   ├── CompoundStmt [Parameters]
+    │   │   ├── Parameter
+    │   │   │   ├── TypeSpecifier [int]
+    │   │   │   └── Identifier [a]
+    │   │   └── Parameter
+    │   │       ├── TypeSpecifier [float]
+    │   │       └── Identifier [b]
+    │   └── CompoundStmt
+    │       ├── PrintStmt
+    │       │   └── Identifier [a]
+    │       └── ReturnStmt
+    │           └── Literal [0]
     └── MainFunction [main]
         ├── CompoundStmt [Parameters]
         └── CompoundStmt
-            └── ExprStmt
-                └── AssignExpr [=]
-                    ├── Identifier [x]
-                    └── Literal [5]
+            ├── VariableDecl
+            │   ├── TypeSpecifier [int]
+            │   └── Identifier [x]
+            ├── ExprStmt
+            │   └── AssignExpr [=]
+            │       ├── Identifier [x]
+            │       └── BinaryExpr [-]
+            │           ├── BinaryExpr [*]
+            │           │   ├── BinaryExpr [+]
+            │           │   │   ├── Literal [5]
+            │           │   │   └── Identifier [x]
+            │           │   └── Identifier [y]
+            │           └── BinaryExpr [+]
+            │               ├── Literal [6]
+            │               └── Identifier [y]
+            └── ForStmt
+                ├── VariableDecl
+                │   ├── TypeSpecifier [int]
+                │   ├── Identifier [i]
+                │   └── Literal [0]
+                ├── BinaryExpr [<]
+                │   ├── Identifier [i]
+                │   └── Literal [0]
+                ├── UnaryExpr [++_postfix]
+                │   └── Identifier [i]
+                └── CompoundStmt
+                    ├── ExprStmt
+                    │   └── AssignExpr [=]
+                    │       ├── Identifier [x]
+                    │       └── Literal [5]
+                    └── BreakStmt
