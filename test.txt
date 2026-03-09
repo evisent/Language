@@ -21,4 +21,8 @@ int main() {
         x = 5;
         break;
     }
+    while(i++){
+        x--;
+    }
+    //popa
 }

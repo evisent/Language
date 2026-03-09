@@ -53,19 +53,26 @@ SYNTAX TREE:
             │           └── BinaryExpr [+]
             │               ├── Literal [6]
             │               └── Identifier [y]
-            └── ForStmt
-                ├── VariableDecl
-                │   ├── TypeSpecifier [int]
-                │   ├── Identifier [i]
-                │   └── Literal [0]
-                ├── BinaryExpr [<]
-                │   ├── Identifier [i]
-                │   └── Literal [0]
+            ├── ForStmt
+            │   ├── VariableDecl
+            │   │   ├── TypeSpecifier [int]
+            │   │   ├── Identifier [i]
+            │   │   └── Literal [0]
+            │   ├── BinaryExpr [<]
+            │   │   ├── Identifier [i]
+            │   │   └── Literal [0]
+            │   ├── UnaryExpr [++_postfix]
+            │   │   └── Identifier [i]
+            │   └── CompoundStmt
+            │       ├── ExprStmt
+            │       │   └── AssignExpr [=]
+            │       │       ├── Identifier [x]
+            │       │       └── Literal [5]
+            │       └── BreakStmt
+            └── WhileStmt
                 ├── UnaryExpr [++_postfix]
                 │   └── Identifier [i]
                 └── CompoundStmt
-                    ├── ExprStmt
-                    │   └── AssignExpr [=]
-                    │       ├── Identifier [x]
-                    │       └── Literal [5]
-                    └── BreakStmt
+                    └── ExprStmt
+                        └── UnaryExpr [--_postfix]
+                            └── Identifier [x]

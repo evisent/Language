@@ -70,6 +70,13 @@ digraph AST {
   node65 [label="Identifier [x]"];
   node66 [label="Literal [5]"];
   node67 [label="BreakStmt"];
+  node68 [label="WhileStmt"];
+  node69 [label="UnaryExpr [++_postfix]"];
+  node70 [label="Identifier [i]"];
+  node71 [label="CompoundStmt"];
+  node72 [label="ExprStmt"];
+  node73 [label="UnaryExpr [--_postfix]"];
+  node74 [label="Identifier [x]"];
 
   node0 -> node1;
   node1 -> node2;
@@ -138,4 +145,11 @@ digraph AST {
   node64 -> node65;
   node64 -> node66;
   node62 -> node67;
+  node36 -> node68;
+  node68 -> node69;
+  node69 -> node70;
+  node68 -> node71;
+  node71 -> node72;
+  node72 -> node73;
+  node73 -> node74;
 }
