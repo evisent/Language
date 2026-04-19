@@ -3,5 +3,6 @@ ast.dot
 ast.txt
 semantic_results.txt
 syntax.txt
+output.txt
 build
 .vscode
