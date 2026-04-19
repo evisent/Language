@@ -4,3 +4,4 @@ ast.txt
 semantic_results.txt
 syntax.txt
 build
+.vscode

@@ -1,7 +1,6 @@
-#include "semantic_analyzer.h"
+#include "semantic.h"
 #include <iomanip>
 
-// Вспомогательные функции
 bool SemanticAnalyzer::isNumericType(const Type& type) {
     return type.kind == DataType::INT || type.kind == DataType::FLOAT;
 }
@@ -13,13 +12,10 @@ bool SemanticAnalyzer::isIntegerType(const Type& type) {
 bool SemanticAnalyzer::canImplicitlyConvert(const Type& from, const Type& to) {
     if (from.kind == to.kind) return true;
     
-    // int -> float
     if (from.kind == DataType::INT && to.kind == DataType::FLOAT) return true;
     
-    // char -> int
     if (from.kind == DataType::CHAR && to.kind == DataType::INT) return true;
     
-    // bool -> int
     if (from.kind == DataType::BOOL && to.kind == DataType::INT) return true;
     
     return false;
@@ -35,16 +31,22 @@ Type SemanticAnalyzer::getCommonType(const Type& t1, const Type& t2) {
     return t1;
 }
 
-// Публичные методы для добавления ошибок и предупреждений
 void SemanticAnalyzer::addError(const std::string& msg) {
-    errors.push_back("Semantic error: " + msg);
+    // Проверяем, не было ли уже такой ошибки
+    if (errorSet.find(msg) == errorSet.end()) {
+        errorSet.insert(msg);
+        errors.push_back("Semantic error: " + msg);
+    }
 }
 
 void SemanticAnalyzer::addWarning(const std::string& msg) {
-    warnings.push_back("Warning: " + msg);
+    if (warningSet.find(msg) == warningSet.end()) {
+        warningSet.insert(msg);
+        warnings.push_back("Warning: " + msg);
+    }
 }
 
-// Управление областями видимости
+
 void SemanticAnalyzer::enterScope() {
     scopeTable.enterScope();
 }
@@ -53,10 +55,8 @@ void SemanticAnalyzer::exitScope() {
     scopeTable.exitScope();
 }
 
-// Объявление переменной
 bool SemanticAnalyzer::declareVariable(const std::string& name, const Type& type,
                                       bool isInitialized, int lineNumber) {
-    // Проверяем, не объявлена ли уже переменная в текущей области
     if (scopeTable.lookupCurrentScope(name)) {
         addError("Variable '" + name + "' already declared in current scope (line " + 
                 std::to_string(lineNumber) + ")");
@@ -74,7 +74,6 @@ bool SemanticAnalyzer::declareVariable(const std::string& name, const Type& type
     return true;
 }
 
-// Объявление функции
 bool SemanticAnalyzer::declareFunction(const std::string& name, const Type& returnType,
                                       const std::vector<Parameter>& params, int lineNumber) {
     if (functionTable.lookupFunction(name)) {
@@ -86,7 +85,6 @@ bool SemanticAnalyzer::declareFunction(const std::string& name, const Type& retu
     return functionTable.addFunction(name, returnType, params, false, lineNumber);
 }
 
-// Объявление класса
 bool SemanticAnalyzer::declareClass(const std::string& name, int lineNumber) {
     if (scopeTable.lookupSymbol(name)) {
         addError("Class '" + name + "' already declared (line " + 
@@ -104,7 +102,6 @@ bool SemanticAnalyzer::declareClass(const std::string& name, int lineNumber) {
     return true;
 }
 
-// Использование переменной
 std::shared_ptr<Symbol> SemanticAnalyzer::useVariable(const std::string& name, bool isAssigned) {
     auto sym = scopeTable.lookupSymbol(name);
     
@@ -132,7 +129,6 @@ std::shared_ptr<Symbol> SemanticAnalyzer::useVariable(const std::string& name, b
     return sym;
 }
 
-// Использование функции
 std::shared_ptr<Symbol> SemanticAnalyzer::useFunction(const std::string& name,
                                                       const std::vector<Type>& argTypes) {
     std::string errorMsg;
@@ -149,7 +145,6 @@ std::shared_ptr<Symbol> SemanticAnalyzer::useFunction(const std::string& name,
     return sym;
 }
 
-// Управление текущей функцией
 void SemanticAnalyzer::setCurrentFunction(const std::string& funcName) {
     if (funcName.empty()) {
         if (!currentFunction.empty()) currentFunction.pop();
@@ -164,7 +159,6 @@ void SemanticAnalyzer::setCurrentFunction(const std::string& funcName) {
     }
 }
 
-// Проверка return
 void SemanticAnalyzer::checkReturnType(bool hasExpr, const Type& exprType) {
     if (currentFunction.empty()) {
         addError("'return' outside function");
@@ -183,7 +177,6 @@ void SemanticAnalyzer::checkReturnType(bool hasExpr, const Type& exprType) {
     }
 }
 
-// Управление классами
 void SemanticAnalyzer::enterClass(const std::string& className) {
     currentClass.push(className);
 }
@@ -194,7 +187,6 @@ void SemanticAnalyzer::exitClass() {
     }
 }
 
-// Проверка типов
 bool SemanticAnalyzer::checkTypes(const Type& expected, const Type& actual, const std::string& context) {
     if (expected == actual || canImplicitlyConvert(actual, expected)) {
         return true;
@@ -205,9 +197,7 @@ bool SemanticAnalyzer::checkTypes(const Type& expected, const Type& actual, cons
     return false;
 }
 
-// Проверка бинарных операций
 bool SemanticAnalyzer::checkBinaryOperation(const std::string& op, const Type& left, const Type& right) {
-    // Арифметические операции
     if (op == "+" || op == "-" || op == "*" || op == "/") {
         if (!isNumericType(left) || !isNumericType(right)) {
             addError("Operator '" + op + "' requires numeric operands, but got " +
@@ -217,7 +207,6 @@ bool SemanticAnalyzer::checkBinaryOperation(const std::string& op, const Type& l
         return true;
     }
     
-    // Операция остатка
     if (op == "%") {
         if (!isIntegerType(left) || !isIntegerType(right)) {
             addError("Operator '%' requires integer operands, but got " +
@@ -227,7 +216,6 @@ bool SemanticAnalyzer::checkBinaryOperation(const std::string& op, const Type& l
         return true;
     }
     
-    // Операции сравнения
     if (op == "<" || op == ">" || op == "<=" || op == ">=") {
         if (!isNumericType(left) || !isNumericType(right)) {
             addError("Comparison operator '" + op + "' requires numeric operands, but got " +
@@ -237,7 +225,6 @@ bool SemanticAnalyzer::checkBinaryOperation(const std::string& op, const Type& l
         return true;
     }
     
-    // Операции равенства
     if (op == "==" || op == "!=") {
         if (left.kind != right.kind && !canImplicitlyConvert(left, right) && !canImplicitlyConvert(right, left)) {
             addError("Cannot compare " + left.toString() + " and " + right.toString());
@@ -246,7 +233,6 @@ bool SemanticAnalyzer::checkBinaryOperation(const std::string& op, const Type& l
         return true;
     }
     
-    // Логические операции
     if (op == "&&" || op == "||") {
         if (left.kind != DataType::BOOL || right.kind != DataType::BOOL) {
             addError("Logical operator '" + op + "' requires boolean operands, but got " +
@@ -259,7 +245,6 @@ bool SemanticAnalyzer::checkBinaryOperation(const std::string& op, const Type& l
     return true;
 }
 
-// Получение результирующего типа операции
 Type SemanticAnalyzer::getResultType(const std::string& op, const Type& left, const Type& right) {
     if (op == "+" || op == "-" || op == "*" || op == "/" || op == "%") {
         if (op == "%") return Type(DataType::INT);
@@ -274,7 +259,6 @@ Type SemanticAnalyzer::getResultType(const std::string& op, const Type& left, co
     return Type(DataType::UNKNOWN);
 }
 
-// Печать результатов
 void SemanticAnalyzer::printResults(std::ostream& os) const {
     if (!errors.empty()) {
         os << "\n=== Semantic Errors ===\n";
@@ -301,10 +285,9 @@ void SemanticAnalyzer::printResults(std::ostream& os) const {
 void SemanticAnalyzer::clear() {
     errors.clear();
     warnings.clear();
+    errorSet.clear();
+    warningSet.clear();
     while (!currentFunction.empty()) currentFunction.pop();
     while (!currentClass.empty()) currentClass.pop();
     loopDepth = 0;
-    
-    // Очищаем таблицы (простой способ - создать новые)
-    // В реальном коде нужно добавить методы очистки в ScopeTable и FunctionTable
 }

@@ -4,7 +4,6 @@
 #include <memory>
 #include <unordered_map>
 
-// Типы данных языка
 enum class DataType {
     VOID,
     INT,
@@ -15,7 +14,6 @@ enum class DataType {
     UNKNOWN
 };
 
-// Категории символов
 enum class SymbolCategory {
     VARIABLE,
     FUNCTION,
@@ -27,11 +25,10 @@ enum class SymbolCategory {
     FIELD
 };
 
-// Структура типа данных
 struct Type {
     DataType kind;
-    std::shared_ptr<Type> elementType;  // для массивов
-    std::string className;               // для классов
+    std::shared_ptr<Type> elementType;
+    std::string className;              
     
     Type(DataType k = DataType::UNKNOWN) : kind(k), elementType(nullptr) {}
     Type(DataType k, std::shared_ptr<Type> elem) : kind(k), elementType(elem) {}
@@ -60,7 +57,6 @@ struct Type {
     }
 };
 
-// Параметр функции/метода
 struct Parameter {
     std::string name;
     Type type;
@@ -69,22 +65,18 @@ struct Parameter {
     Parameter(const std::string& n, const Type& t) : name(n), type(t) {}
 };
 
-// Символ в таблице символов
 struct Symbol {
     SymbolCategory category;
     std::string name;
     Type type;
     
-    // Для функций/методов
     std::vector<Parameter> parameters;
     bool defined = false;
     
-    // Для переменных/полей
     bool isInitialized = false;
     bool isUsed = false;
     int lineNumber = 0;
     
-    // Для классов
     std::unordered_map<std::string, std::shared_ptr<Symbol>> fields;
     std::unordered_map<std::string, std::shared_ptr<Symbol>> methods;
     

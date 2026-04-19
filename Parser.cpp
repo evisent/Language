@@ -6,7 +6,6 @@
 #include <iomanip>
 #include <string>
 
-// ============= ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ =============
 
 DataType Parser::stringToDataType(const std::string& typeStr) {
     if (typeStr == "int") return DataType::INT;

@@ -8,7 +8,7 @@
 class ScopeTable {
 private:
     using Scope = std::unordered_map<std::string, std::shared_ptr<Symbol>>;
-    std::vector<Scope> scopes;  // стек областей видимости
+    std::vector<Scope> scopes; 
     
 public:
     void enterScope() {
@@ -17,10 +17,8 @@ public:
     
     void exitScope() {
         if (!scopes.empty()) {
-            // Проверяем неиспользованные переменные при выходе из области
             for (const auto& [name, sym] : scopes.back()) {
                 if (sym->category == SymbolCategory::VARIABLE && !sym->isUsed) {
-                    // Можно выводить предупреждения
                     std::cout << "Warning: Variable '" << name << "' declared but never used (line " 
                               << sym->lineNumber << ")" << std::endl;
                 }
@@ -36,7 +34,7 @@ public:
         
         auto& currentScope = scopes.back();
         if (currentScope.find(symbol->name) != currentScope.end()) {
-            return false;  // символ уже объявлен в текущей области
+            return false;  
         }
         
         currentScope[symbol->name] = symbol;
@@ -44,7 +42,6 @@ public:
     }
     
     std::shared_ptr<Symbol> lookupSymbol(const std::string& name) {
-        // Ищем от самой вложенной к глобальной
         for (auto it = scopes.rbegin(); it != scopes.rend(); ++it) {
             auto found = it->find(name);
             if (found != it->end()) {

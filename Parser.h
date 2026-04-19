@@ -2,7 +2,7 @@
 
 #include "Lexer.h"
 #include "ASTnode.h"
-#include "semantic_analyzer.h"
+#include "semantic.h"
 #include <string>
 #include <vector>
 #include <unordered_map>

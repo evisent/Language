@@ -9,5 +9,5 @@ add_executable(Languages
     Trie.cpp
     Parser.cpp
     ASTnode.cpp
-    semantic_analyzer.cpp
+    semantic.cpp
 )
