@@ -1,15 +1,17 @@
-int fun(int a, float b){
+int fun(int a){
     print(a);
     return 0;
 }
 
 int main() {
-    int x;
+    int x = 0;
     int y = 2;
+    char d = "g";
     x = (5 + x) * y - (6 + y);
-    for(int i = 0;i < 0; i++){
+    for(int i = 0;i < 2; i++){
         x = 5;
         break;
     }
+    print(fun(5));
     return 0;
 }

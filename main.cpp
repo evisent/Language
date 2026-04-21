@@ -8,6 +8,24 @@
 #include <memory>
 #include <unordered_map>
 
+void writePOLIZToFile(const std::shared_ptr<ASTNode>& root, const std::string& filename) {
+    std::ofstream file(filename);
+    if (!file.is_open()) {
+        std::cerr << "Cannot create POLIZ output file: " << filename << std::endl;
+        return;
+    }
+    
+    file << "POLIZ (Reverse Polish Notation):\n";
+    file << "================================\n\n";
+    
+    if (root) {
+        std::string poliz = root->toPOLIZ();
+        file << poliz;
+    }
+    
+    file.close();
+}
+
 std::string readFile(const std::string& filename) {
     std::ifstream file(filename);
     if (!file.is_open()) {
@@ -46,7 +64,6 @@ void printAST(const std::shared_ptr<ASTNode>& node, const std::string& prefix = 
     }
 }
 
-// Рекурсивная функция для записи AST в файл
 void writeASTNodeToFile(std::ofstream& file, const std::shared_ptr<ASTNode>& node, const std::string& prefix, bool isLast) {
     if (!node) return;
     file << prefix;
@@ -70,7 +87,6 @@ void writeASTToFile(const std::shared_ptr<ASTNode>& root, const std::string& fil
     file.close();
 }
 
-// Рекурсивная функция для обхода AST и создания узлов DOT
 void traverseASTForDOT(std::ofstream& file, std::unordered_map<void*, int>& nodeIds, int& nodeId, const std::shared_ptr<ASTNode>& node) {
     if (!node) return;
     int id = nodeId++;
@@ -83,7 +99,6 @@ void traverseASTForDOT(std::ofstream& file, std::unordered_map<void*, int>& node
     }
 }
 
-// Рекурсивная функция для создания ребер в DOT
 void createEdgesForDOT(std::ofstream& file, std::unordered_map<void*, int>& nodeIds, const std::shared_ptr<ASTNode>& node) {
     if (!node) return;
     int parentId = nodeIds[node.get()];
@@ -182,25 +197,27 @@ int main() {
         std::cout << "    SEMANTIC ANALYSIS" << std::endl;
         std::cout << "=====================================" << std::endl;
         
-        // Семантический анализ уже выполняется во время парсинга
-        // Просто выводим результаты
         parser.printSemanticResults();
         
-        // Сохраняем результаты семантического анализа в файл
         std::string semanticFile = "semantic_results.txt";
         std::ofstream semFile(semanticFile);
         if (semFile.is_open()) {
-            // Сохраняем текущий буфер cout
-            std::streambuf* coutbuf = std::cout.rdbuf();
-            // Перенаправляем cout в файл
-            std::cout.rdbuf(semFile.rdbuf());
+            std::streambuf* coutbuf = std::cout.rdbuf();            std::cout.rdbuf(semFile.rdbuf());
             parser.printSemanticResults();
-            // Восстанавливаем cout
             std::cout.rdbuf(coutbuf);
             semFile.close();
             std::cout << "\nSemantic results saved to: " << semanticFile << std::endl;
         }
+        std::cout << "\n=====================================" << std::endl;
+        std::cout << "    POLIZ GENERATION" << std::endl;
+        std::cout << "=====================================" << std::endl;
         
+        std::string polizCode = astRoot->toPOLIZ();
+        std::cout << "\nGenerated POLIZ:\n" << polizCode << std::endl;
+        
+        std::string polizFile = "poliz.txt";
+        writePOLIZToFile(astRoot, polizFile);
+        std::cout << "\nPOLIZ saved to: " << polizFile << std::endl;
     } else {
         std::cout << "✗ Syntax analysis: FAILED" << std::endl;
         std::cout << "The program contains syntax errors!" << std::endl;

@@ -53,11 +53,16 @@ public:
     
     std::string toString() const;
     static std::string nodeTypeToString(NodeType type);
+
+    std::string toPOLIZ() const;
     
 private:
     NodeType type_;
     std::string value_;
     std::vector<std::shared_ptr<ASTNode>> children_;
+    void generatePOLIZForNode(std::stringstream& ss, bool inExpression = false) const;
+    static int labelCounter;
+    static std::string generateLabel();
 };
 
 #endif

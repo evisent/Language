@@ -1,0 +1,39 @@
+POLIZ (Reverse Polish Notation):
+================================
+
+FUNC fun:
+LD fun
+LD a
+LD a
+PRINT
+PUSH 0
+RET
+RET
+MAIN:
+DECL int 
+PUSH 0
+ST int
+DECL int 
+PUSH 2
+ST int
+DECL char 
+PUSH "g"
+ST char
+ST x
+DECL int 
+PUSH 0
+ST int
+L0:
+JZ L1
+PUSH 5
+ST x
+BREAK
+L2:
+JMP L0
+L1:
+LD fun
+PUSH 5
+CALL 
+PUSH 0
+RET
+HLT

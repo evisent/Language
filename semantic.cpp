@@ -32,7 +32,6 @@ Type SemanticAnalyzer::getCommonType(const Type& t1, const Type& t2) {
 }
 
 void SemanticAnalyzer::addError(const std::string& msg) {
-    // Проверяем, не было ли уже такой ошибки
     if (errorSet.find(msg) == errorSet.end()) {
         errorSet.insert(msg);
         errors.push_back("Semantic error: " + msg);
